@@ -8,7 +8,7 @@ import ru.mipt.cyberSecurityHW.cryptographers.VigenereCryptographer;
 
 @Data
 public class CryptographerTypeHandler {
-    public Cryptographer chooseCryptographer(String cryptographerType) {
+    public static Cryptographer chooseCryptographer(String cryptographerType) {
         if (cryptographerType.toLowerCase().contains("cesar")){
             return new CesarCryptographer();
         } else if(cryptographerType.toLowerCase().contains("shuffle")){

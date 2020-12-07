@@ -13,7 +13,7 @@ public class CesarCryptographer implements Cryptographer  {
 
 
     @SneakyThrows
-    public void encrypt(String filename, String key) {
+    public String encrypt(String filename, String key) {
         int cipherKey = Integer.parseInt(key);
         inputFile = new FileReader(filename);
         reader = new BufferedReader(inputFile);
@@ -30,12 +30,13 @@ public class CesarCryptographer implements Cryptographer  {
                 }
             }
         }
-        System.out.println(encryptedLine);
+        inputFile.close();
+        return encryptedLine.toString();
     }
 
     @SneakyThrows
     @Override
-    public void decrypt(String filename, String key) {
+    public String decrypt(String filename, String key) {
         int cipherKey = Integer.parseInt(key);
         inputFile = new FileReader(filename);
         reader = new BufferedReader(inputFile);
@@ -52,6 +53,7 @@ public class CesarCryptographer implements Cryptographer  {
                 }
             }
         }
-        System.out.println(encryptedLine);
+        inputFile.close();
+        return encryptedLine.toString();
     }
 }

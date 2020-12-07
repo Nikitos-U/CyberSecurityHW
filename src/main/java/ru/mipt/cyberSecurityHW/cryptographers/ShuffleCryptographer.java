@@ -16,7 +16,7 @@ public class ShuffleCryptographer implements Cryptographer {
 
     @SneakyThrows
     @Override
-    public void encrypt(String filename, String key) {
+    public String encrypt(String filename, String key) {
         List<Integer> cipherKey = of(key.split(",")).stream().map(Integer::parseInt).collect(Collectors.toList());
         inputFile = new FileReader(filename);
         reader = new BufferedReader(inputFile);
@@ -37,12 +37,13 @@ public class ShuffleCryptographer implements Cryptographer {
                     result.append(transposition[j]);
             }
         }
-        System.out.println(result);
+        inputFile.close();
+        return result.toString();
     }
 
     @SneakyThrows
     @Override
-    public void decrypt(String filename, String key) {
+    public String decrypt(String filename, String key) {
         inputFile = new FileReader(filename);
         reader = new BufferedReader(inputFile);
         List<Integer> cipherKey = of(key.split(",")).stream().map(Integer::parseInt).collect(Collectors.toList());
@@ -60,6 +61,7 @@ public class ShuffleCryptographer implements Cryptographer {
             }
 
         }
-        System.out.println(result);
+        inputFile.close();
+        return result.toString();
     }
 }
