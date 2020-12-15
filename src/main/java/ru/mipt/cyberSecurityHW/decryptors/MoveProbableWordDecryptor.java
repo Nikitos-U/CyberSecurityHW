@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.mipt.cyberSecurityHW.cryptographers.Cryptographer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+
 import static java.lang.String.valueOf;
 import static ru.mipt.cyberSecurityHW.CryptographerTypeHandler.chooseCryptographer;
 
@@ -23,7 +23,7 @@ public class MoveProbableWordDecryptor {
             decryptSuffle(fileName, probableWord, keySize, currentCryptographer, probableKeys);
             return probableKeys;
         } else if (encryptionType.toLowerCase().contains("vigenere")) {
-            decryptVigenere(fileName, probableWord, keySize, currentCryptographer, probableKeys);
+            decryptVigenere(new char[keySize], 0, fileName, probableWord, currentCryptographer, probableKeys);
         }
         return probableKeys;
     }
@@ -69,26 +69,17 @@ public class MoveProbableWordDecryptor {
         }
     }
 
-    private void decryptVigenere(String fileName, String probableWord, int keySize, Cryptographer currentCryptographer, HashMap<String, String> probableKeys) {
+    private static void decryptVigenere(char[] perm, int position, String fileName, String probableWord, Cryptographer currentCryptographer, HashMap<String, String> probableKeys) {
         String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.-";
-        ArrayList<String> keys = new ArrayList<>();
-        permutation(new char[keySize], 0, alphabet, keys);
-        for (String key : keys) {
-            String probableLine = currentCryptographer.decrypt(fileName, key);
-            if (probableLine.contains(probableWord)){
-                probableKeys.put(key, probableLine);
-            }
-        }
-
-    }
-
-    private static void permutation(char[] perm, int position, String alphabet, ArrayList<String> keys) {
         if (position == perm.length) {
-            keys.add(new String(perm));
+            String probableLine = currentCryptographer.decrypt(fileName, new String(perm));
+            if (probableLine.contains(probableWord)) {
+                probableKeys.put(new String(perm), probableLine);
+            }
         } else {
             for (int i = 0; i < alphabet.length(); i++) {
                 perm[position] = alphabet.charAt(i);
-                permutation(perm, position + 1, alphabet, keys);
+                decryptVigenere(perm, position + 1, fileName, probableWord, currentCryptographer, probableKeys);
             }
         }
     }
